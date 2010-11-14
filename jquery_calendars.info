@@ -1,0 +1,6 @@
+; $Id$
+name = "jQuery World Calendars"
+description = "Provides jQuery World Calendars library API for other modules."
+package = Other
+core = 6.x
+dependencies[] = libraries

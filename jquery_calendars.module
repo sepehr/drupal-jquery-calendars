@@ -1,0 +1,21 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Implements necessary hooks, API and helpers for jQuery World Calendars.
+ */
+
+/**
+ * API function to include specified jQuery Calendars library files.
+ *
+ * @param $files
+ *   A string with a single file name or
+ *   an array of additional files that should be loaded on the page.
+ * @param $locale
+ *   A string containing the calendar desired locale.
+ */
+function jquery_calendars_add($files = array(), $locale = NULL) {
+
+}
+
