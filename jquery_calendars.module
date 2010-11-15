@@ -27,7 +27,7 @@ function jquery_calendars_init() {
   $requirements = array_pop(_jquery_calendars_requirements_check());
 
   if ($requirements['severity'] == REQUIREMENT_ERROR) {
-    drupal_set_message($requirements['description'], 'warning', FALSE);
+    drupal_set_message($requirements['description'], 'error', FALSE);
   }
 }
 
@@ -475,7 +475,7 @@ function _jquery_calendars_requirements_check() {
   }
   elseif (!$libraries[1]) {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_ERROR;
-    $requirements['jquery_calendars']['description'] = $t('The <a href="!library">jQuery 1.4.2</a> library which is required for <em>jQuery World Calendars</em> is missing. <a href="!download">Download</a> the library and place it to <code>sites/all/libraries/jquery</code> directory. So it will be accessible via <code><strong>sites/all/libraries/jquery/jquery-1.4.2.min.js</strong></code> path.',
+    $requirements['jquery_calendars']['description'] = $t('The <em>jQuery World Calendars</em> plugin requires <a href="!library">jQuery 1.4.2+</a> library which is missing. <a href="!download">Download</a> the library and place it to <code>sites/all/libraries/jquery</code> directory. So it will be accessible via <code><strong>sites/all/libraries/jquery/jquery-1.4.2.min.js</strong></code> path.',
       array(
         '!library' => 'http://jquery.com/',
         '!download' => 'http://code.jquery.com/jquery-1.4.2.min.js',
