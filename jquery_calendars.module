@@ -63,7 +63,7 @@ function jquery_calendars_admin_settings() {
     '#type' => 'radios',
     '#title' => t('Library compression level'),
     '#description' => t('Choose library files compression level. This will override the same setting set by the modules which implements the API.'),
-    '#default_value' => variable_get('jquery_calendars_compression_level', 'normal'),
+    '#default_value' => variable_get('jquery_calendars_compression_level', 'pack'),
     '#options' => array(
       'pack' => t('Packed - <em>7.1K core.</em>'),
       'min' => t('Minified - <em>10.6K core.</em>'),
