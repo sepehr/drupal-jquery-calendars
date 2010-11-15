@@ -10,20 +10,29 @@
  * Implements hook_requirements().
  */
 function jquery_calendars_requirements($phase) {
+  // Module API is not available at this point.
+  drupal_load('module', 'jquery_calendars');
 
+  // Return the $requirements array.
+  return _jquery_calendars_requirements_check();
 }
+
 
 /**
- * Implements hook_install().
+ * Implementation of hook_install().
  */
 function jquery_calendars_install() {
-
+  drupal_set_message(st('jQuery World Calendars has been installed. Please set your settings in <a href="!link">configuration page</a>.',
+    array('!link' => url('admin/settings/jquery-calendars'))
+  ));
 }
+
 
 /**
  * Implements hook_uninstall().
  */
 function jquery_calendars_uninstall() {
-
+  variable_del('jquery_calendars_compression_level');
+  variable_del('jquery_calendars_datepicker_theme');
 }
 

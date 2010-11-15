@@ -1,12 +1,8 @@
 // $Id$
 
-Notice
-======
-IT'S NOT USABLE YET.
-
 Description
 ===========
-Provides jQuery World Calendars library API for other modules.
+Provides jQuery World Calendars library API to other modules.
 
 Requirements
 ============
