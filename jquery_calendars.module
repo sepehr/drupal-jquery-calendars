@@ -87,7 +87,7 @@ function jquery_calendars_admin_settings() {
   $form['datepicker_demo_wrapper'] = array(
     '#type' => 'fieldset',
     '#title' => t('Datepicker Demo'),
-    '#description' => t('This is a jQuery World Calendars Datepicker demo based on your current saved settings.You might want to read <a href="!module">module</a> and <a href="!library">library</a> API docs.',
+    '#description' => t('This is a jQuery World Calendars Datepicker demo based on your current saved settings. You might want to read <a href="!module">module</a> and <a href="!library">library</a> API docs.',
       array(
         '!library' => 'http://keith-wood.name/calendarsRef.html',
         '!module' => $base_path . drupal_get_path('module', 'jquery_calendars') . '/README.txt',
@@ -126,10 +126,9 @@ function jquery_calendars_admin_settings() {
 /**
  * Implements hook_theme_registry_alter().
  *
- * Make the page preprocess function runs last,
- * so that a theme can't call drupal_get_js().
+ * Make the page preprocess function runs last.
  */
-function jquery_calendars_theme_registry_alter(&$theme_registry) {
+function jquery_calendars_theme_registry_alter(&$theme_registry) {dpm($theme_registry['page']);
   if (isset($theme_registry['page'])) {
     if ($key = array_search('jquery_calendars_preprocess_page', $theme_registry['page']['preprocess functions'])) {
       unset($theme_registry['page']['preprocess functions'][$key]);
@@ -149,11 +148,14 @@ function jquery_calendars_theme_registry_alter(&$theme_registry) {
 function jquery_calendars_preprocess_page(&$vars) {
   global $_jquery_calendars;
 
-  if ($_jquery_calendars === TRUE && !empty($vars['scripts'])) {
+  if ($_jquery_calendars == TRUE && !empty($vars['scripts'])) {
     $scripts = drupal_add_js();
 
     // Add the 1.4.x one.
-    $scripts['core'] = array_merge(array(_jquery_calendars_path('jquery') . JQUERY_CALENDARS_JQUERY => $scripts['core']['misc/jquery.js']), $scripts['core']);
+    $scripts['core'] = array_merge(array(
+      _jquery_calendars_path('jquery') . JQUERY_CALENDARS_JQUERY => $scripts['core']['misc/jquery.js']),
+      $scripts['core']
+    );
 
     // Remove core's jQuery.
     unset($scripts['core']['misc/jquery.js']);
