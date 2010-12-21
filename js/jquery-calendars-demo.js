@@ -5,10 +5,14 @@
  * Contains a jQuery World Calendars Datepicker demo javascript code.
  */
 
-$(document).ready(function() {
-  var $picker = $('#datepicker-demo'),
-      $calendars = $('#datepicker-demo-calendars');
-      
+/**
+ * jQuery Calendars demo initializer.
+ */
+Drupal.behaviors.jqueryCalendarsDemo = function(context) {
+  var $picker = $(context).find('#datepicker-demo'),
+      $calendars = $(context).find('#datepicker-demo-calendars');
+
+  // Initialize the library.
   $picker.calendarsPicker({
     monthsToShow: [2, 3],
     showOtherMonths: false,
@@ -21,7 +25,8 @@ $(document).ready(function() {
       ));
     },
   });
-  
+
+  // Bind onchange handler.
   $calendars.bind('change', function() {
     try {
       var calendar = $.calendars.instance($calendars.val());
@@ -31,5 +36,5 @@ $(document).ready(function() {
       alert(e);
     }
   });
-});
+};
 
