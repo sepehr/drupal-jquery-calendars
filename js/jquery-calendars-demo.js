@@ -30,7 +30,11 @@ Drupal.behaviors.jqueryCalendarsDemo = function(context) {
   $calendars.bind('change', function() {
     try {
       var calendar = $.calendars.instance($calendars.val());
-      $picker.calendarsPicker('option', {calendar: calendar} ).calendarsPicker('showMonth');
+      $picker
+        .calendarsPicker('option', {
+          calendar: calendar,
+        })
+        .calendarsPicker('showMonth');
     }
     catch (e) {
       alert(e);
