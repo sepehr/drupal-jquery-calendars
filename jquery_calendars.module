@@ -116,8 +116,8 @@ function jquery_calendars_admin_settings() {
   // API use & Javascript stuffs.
   $path = drupal_get_path('module', 'jquery_calendars');
   jquery_calendars_add('picker, picker.ext, hebrew, persian, taiwan, thai, islamic, ethiopian, coptic, mayan', array(), $theme);
-  drupal_add_js($path . '/jquery-calendars.js');
-  drupal_add_css($path . '/jquery-calendars.css');
+  drupal_add_js($path . '/jquery_calendars.js');
+  drupal_add_css($path . '/jquery_calendars.css');
 
   return system_settings_form($form);
 }
