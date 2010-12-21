@@ -128,7 +128,7 @@ function jquery_calendars_admin_settings() {
  *
  * Make the page preprocess function runs last.
  */
-function jquery_calendars_theme_registry_alter(&$theme_registry) {dpm($theme_registry['page']);
+function jquery_calendars_theme_registry_alter(&$theme_registry) {
   if (isset($theme_registry['page'])) {
     if ($key = array_search('jquery_calendars_preprocess_page', $theme_registry['page']['preprocess functions'])) {
       unset($theme_registry['page']['preprocess functions'][$key]);
