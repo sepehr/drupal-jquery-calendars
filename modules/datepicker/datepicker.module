@@ -1,0 +1,15 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Implements necessary hooks, API and helpers for Form Datepicker Element.
+ */
+
+/**
+ * Implements hook_elements().
+ */
+function datepicker_elements() {
+  return array();
+}
+

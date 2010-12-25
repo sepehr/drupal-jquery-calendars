@@ -1,0 +1,23 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Implements necessary hooks for un/installation.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function datepicker_install() {
+  
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function datepicker_uninstall() {
+  
+}
+
