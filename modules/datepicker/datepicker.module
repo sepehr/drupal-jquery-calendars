@@ -8,8 +8,514 @@
 
 /**
  * Implements hook_elements().
+ *
+ * Introduces the jQuery World Calendars Datepicker to Drupal FAPI. The datepicker specific
+ * properties are as defined in @return block below.
+ *
+ * @return
+ *   A keyed array representing a datepicker element properties with default values:
+ *
+ *   - #datepicker_calendar: String or comma separated string typed within allowed values, default is 'gregorian'.
+ *     The calendar to be used with datepicker. Allowed values are as defined
+ *     in jQuery World Calendars module:
+ *     - gregorian (default)
+ *     - taiwan
+ *     - thai
+ *     - julian
+ *     - persian
+ *     - islamic
+ *     - hebrew
+ *     - ethiopian
+ *     - coptic
+ *     - mayan
+ *
+ *   - #datepicker_locale: String typed within allowed values, default is 'en'.
+ *     The calendar locale. Allowed values are as per defined in jquery_calendars_add() 
+ *     docs and default is 'en'.
+ *
+ *   - #datepicker_locales: Array or comma separated string typed within allowed values, default is an empty array.
+ *     An array of jQuery World Calendars locale components to load.
+ *
+ *   - #datepicker_picker_class: String typed, default is ''.
+ *     Any extra CSS class(es) to add to this datepicker instance. By specifying a unique class you can
+ *     individually target datepicker instances with special styling.
+ *
+ *   - #datepicker_show_on_focus: Boolean typed, default is TRUE.
+ *     When TRUE a popup datepicker appears for an input field when it gains focus.
+ *     When FALSE you should specify a showTrigger instead.
+ *
+ *   - #datepicker_show_trigger: String typed, default is NULL.
+ *     The element(s) that will trigger a popup datepicker to appear when they are clicked.
+ *     You can provide either the element itself, a jQuery collection containing the element, a string
+ *     selector for the desired element, or a string version of the element. Default value is NULL.
+ *
+ *   - #datepicker_show_anim: String typed within allowed values, default is 'show'.
+ *     The name of the animation to use when a popup datepicker appears and disappears.
+ *     jQuery UI effects are not supported yet. The value can be one of the standard animations:
+ *     - show (default)
+ *     - fadeIn
+ *     - slideDown
+ *
+ *   - #datepicker_show_speed: String typed within allowed values, default is 'normal'.
+ *     The speed at which the animation runs. Use one of the standard speeds:
+ *     - slow
+ *     - normal (default)
+ *     - fast
+ *     - or specify the duration in milliseconds.
+ *
+ *   - #datepicker_popup_container: String typed indicating a valid JS element or jQuery selector, default is NULL.
+ *     The container for the popup datepicker, allowing you to control where in the DOM the datepicker is
+ *     appended. You can provide either the element itself, a jQuery collection containing the element,
+ *     or a string selector for the desired element. It defaults to the document body if set to NULL.
+ *
+ *   - #datepicker_alignment: String typed within allowed values, default is 'bottom'.
+ *     Control the alignment of a popup datepicker with respect to its input field.
+ *     Use one of the following values, first two options will reposition the datepicker 
+ *     if it does not fit in the requested space:
+ *     - bottom (default)
+ *     - top
+ *     - topLeft
+ *     - topRight
+ *     - bottomLeft
+ *     - bottomLeft
+ *
+ *   - #datepicker_fixed_weeks: Boolean typed, default is FALSE.
+ *     Set to TRUE to always have six weeks shown, or false to only show as many weeks as are needed.
+ *     This setting only applies to a datepicker for a single month as all multi-month datepickers
+ *     are always fixed.
+ *
+ *   - #datepicker_first_day: Integer typed within 0..6, default is NULL.
+ *     The number of the first day of the week shown in the datepicker, with 0 being Sunday, 1 being Monday,
+ *     etc. If set to NULL the first day from the underlying calendar is used. Default is NULL.
+ *
+ *   - #datepicker_calculate_week: String typed indicating a valid JS callback, default is NULL.
+ *     A JS function name to calculate the week of the year for a given date. The function should be
+ *     available at the time of datepicker JS rendering, otherwise you'll get unexpected errors.
+ *
+ *   - #datepicker_months_to_show: String typed, default is 1.
+ *     The number of months to show in the datepicker. It may be expressed as a single number of columns,
+ *     or as a JS array of rows and columns in form of [x, y].
+ *
+ *   - #datepicker_months_offset: Integer typed, default is 0.
+ *     When showing multiple months, this setting indicates at which position the current month is shown,
+ *     starting from zero.
+ *
+ *   - #datepicker_months_to_step: Integer typed, default is 1.
+ *     The number of months to move when the previous or next  month commands are invoked.
+ *
+ *   - #datepicker_months_to_jump: Integer typed, default is 12.
+ *     The number of months to move when the previous or next  year commands are invoked.
+ *
+ *   - #datepicker_use_mouse_weel: Boolean typed, default is TRUE.
+ *     If the jQuery MouseWheel plugin is available and this setting is TRUE then you can use the mouse
+ *     wheel to step through the months or years (with the Ctrl key). If this setting is FALSE then the
+ *     mouse wheel has no effect within the datepicker, even if the plugin is available.
+ *
+ *   - #datepicker_change_month: Boolean typed, default is TRUE.
+ *     Set to TRUE to allow the month and year to be changed via a drop-down selection on the first month
+ *     shown in the datepicker. Set to FALSE to only allow changes via the various previous and next commands.
+ *
+ *   - #datepicker_year_range: String typed in form of 'X:Y', 'c-N:c+N' where X & Y are valid gregorian years and N is a
+ *     valid integer, default is 'c-10:c+10'.
+ *     Specify the range of years shown in the year drop-down. The setting contains the start and end of the
+ *     range separated by a colon (:). Each limit may be an absolute year ('1980'), an offset from today
+ *     ('-10' or '+10'), or an offset from the currently selected date ('c-5' or 'c+5'). Place the maximum
+ *     value first to have the list appear in descending order. Set to 'any' to allow direct input of the year
+ *     without selection from a drop-down list. The default is to show 10 years before and after the currently
+ *     selected date. Note that this setting does not restrict the dates that may be selected. You should use
+ *     the #datepicker_min_date and #datepicker_max_date settings to impose limits on the dates that may be selected.
+ *
+ *   - #datepicker_show_other_months: Boolean typed, default is FALSE.
+ *     Set to true to show the days in other months that appear in the partial weeks before or
+ *     after the current month.
+ *
+ *   - #datepicker_select_other_months: Boolean typed, default is FALSE.
+ *     Set to TRUE to allow the days in other months that appear in the partial weeks before or after the
+ *     current month to be selected. This setting only applies if #datepicker_show_other_months is TRUE.
+ *
+ *   - #datepicker_default_date: String or array typed, default is NULL to use current date.
+ *     Specify the date to show if no other date has been selected. This may be specified as an actual
+ *     date (CDate), or a date string in the current #datepicker_date_format, as a number of days relative to today,
+ *     or as a string of offsets and periods relative to today. For the last use 'y' for years, 'm' for months,
+ *     'w' for weeks, or 'd' for days. Multiple offsets may be combined in the one string. Set to NULL for a
+ *     default date of today. Example values are:
+ *     - array(2011, 05, 09)
+ *     - '05/09/2011'
+ *     - '+7'
+ *     - '+1m -1d'
+ *
+ *   - #datepicker_select_default_date: Boolean typed, default is FALSE.
+ *     Set to TRUE to automatically select the #datepicker_default_date when no other date has been selected.
+ *
+ *   - #datepicker_min_date: String typed, default is NULL.
+ *     Specify the minimum date allowed to be selected. This may be specified as an actual date (CDate),
+ *     as a date string in the current #datepicker_date_format, as a number of days relative to today, or as a string of
+ *     offsets and periods relative to today. For the last use 'y' for years, 'm' for months, 'w' for weeks,
+ *     or 'd' for days. Multiple offsets may be combined in the one string. Set to NULL for no minimum.
+ *     Example values are as for #datepicker_default_date.
+ *
+ *   - #datepicker_max_date: String typed, default is NULL.
+ *     Specify the maximum date allowed to be selected. This may be specified as an actual date (CDate),
+ *     as a date string in the current #datepicker_date_format, as a number of days relative to today, or as a string of
+ *     offsets and periods relative to today. For the last use 'y' for years, 'm' for months, 'w' for weeks,
+ *     or 'd' for days. Multiple offsets may be combined in the one string. Set to NULL for no maximum.
+ *     Example values are as for #datepicker_default_date.
+ *
+ *   - #datepicker_date_format: String typed, default is NULL.
+ *     Specify the format applied to the selected dates. This may be any combination of the values below.
+ *     To use any of these characters without substitution you must surround them in single quotes (').
+ *     If set to NULL the default date format specified by the calendar is used instead.
+ *     - d: day of the month (no leading zero).
+ *     - dd: day of the month (two digit).
+ *     - D: day name short.
+ *     - DD: day name long.
+ *     - o: day of the year (no leading zeros).
+ *     - oo: day of the year (three digits).
+ *     - w: week of year (no leading zero).
+ *     - ww: week of year (two digit).
+ *     - m: month of the year (no leading zero).
+ *     - mm: month of the year (two digit).
+ *     - M: month name short.
+ *     - MM: month name long.
+ *     - yy: year (two digit).
+ *     - yyyy: year (four digit).
+ *     - YYYY: formatted year (depends on calendar).
+ *     - J: Julian date.
+ *     - @: Unix timestamp (ms since 01/01/1970).
+ *     - !: Windows ticks (100ns since 01/01/0001).
+ *     - '...': literal text.
+ *     - '': single quote.
+ *     - ATOM: 'yyyy-mm-dd'
+ *     - COOKIE: 'D, dd M yyyy'
+ *     - FULL: 'DD, MM d, yyyy'
+ *     - ISO_8601: 'yyyy-mm-dd'
+ *     - JULIAN: 'J'
+ *     - RFC_822: 'D, d M yy'
+ *     - RFC_850: 'DD, dd-M-yy'
+ *     - RFC_1036: 'D, d M yy'
+ *     - RFC_1123: 'D, d M yyyy'
+ *     - RFC_2822: 'D, d M yyyy'
+ *     - RSS: 'D, d M yy'
+ *     - TICKS: '!'
+ *     - TIMESTAMP: '@'
+ *     - W3C: 'yyyy-mm-dd'
+ *
+ *   - #datepicker_auto_size: Boolean typed, default is FALSE.
+ *     Set to TRUE to resize the input field based on the maximum length of a date in the current
+ *     #datepicker_date_format. Set to FALSE to not change the field length.
+ *
+ *   - #datepicker_range_select: Boolean typed, default is FALSE.
+ *     Set to TRUE to allow the selection of a date range in the datepicker. The first selected date is the
+ *     start of the range and the second selected date is the end of the range. A popup datepicker closes
+ *     automatically on selection of the range end. Set to FALSE to select a single date.
+ *
+ *   - #datepicker_range_separator: String typed, default is '-'.
+ *     Specify the separator shown between two dates if the #datepicker_range_select is set to TRUE.
+ *
+ *   - #datepicker_multi_select: Integer typed, default is 0.
+ *     Specify the maximum number of individual separate dates that may be selected in the datepicker.
+ *     Dates may be de-selected by clicking on them a second time. A popup datepicker closes automatically on
+ *     selection of the maximum number allowed. Set to 0 to select a single date.
+ *
+ *   - #datepicker_multi_separator: String typed, default is ','.
+ *     Specify the separator shown between the dates selected in a multiple date datepicker (#datepicker_multi_select).
+ *
+ *   - #datepicker_on_date: String typed, indicating a valid JS callback, default is NULL.
+ *     Specify a callback function to provide additonal details about individual dates shown in the datepicker.
+ *     The function is called for each date displayed and receives the date as a parameter (CDate), while "this"
+ *     refers to the associated control. It returns an object with the following attributes (all optional):
+ *     - selectable: (boolean) TRUE if the date is selectable, FALSE if not.
+ *     - dateClass: (string) any CSS class(es) to apply to this date.
+ *     - title: (string) a tooltip for this date.
+ *     - content: (string) content for this date to replace the basic day number.
+ *
+ *   - #datepicker_on_show: String typed, indicating a valid JS callback, default is NULL.
+ *     Specify a callback function to provide additonal functionality to a datepicker. The function is called
+ *     just before the datepicker is shown and receives the completed datepicker division as a jQuery object,
+ *     the underlying calendar implementation, and the current instance settings as parameters, while "this"
+ *     refers to the associated control. It should update the datepicker division as necessary.
+ *
+ *   - #datepicker_on_change_month_year: String typed, indicating a valid JS callback, default is NULL.
+ *     Specify a callback function to be notified of changes to the month and year shown in a datepicker. The
+ *     function is called when the month/year changes and receives the year and month as parameters, while
+ *     "this" refers to the associated control.
+ *
+ *   - #datepicker_on_select: String typed, indicating a valid JS callback, default is NULL.
+ *     Specify a callback function to be notified of date selection in a datepicker. The function is called when
+ *     each date is selected and receives the currently selected dates (CDate[]) as the parameter, while "this"
+ *     refers to the associated control. The array is empty if no dates have been selected. Note that when the
+ *     start of a range is selected the dates array contains two entries, with both being that starting date.
+ *
+ *   - #datepicker_on_close: String typed, indicating a valid JS callback, default is NULL.
+ *     Specify a callback function to be notified of a popup datepicker closing. The function is called when
+ *     the datepicker is closed (by any means) and receives the currently selected dates (CDate[]) as the
+ *     parameter, while "this" refers to the associated control. The array is empty if no dates have been
+ *     selected. Note that range selections always have two entries, with both being the starting date if
+ *     no end date has been selected.
+ *
+ *   - #datepicker_alt_field: String typed optionally indicating a JS element or jQuery selector, default is NULL.
+ *     Specify another field to be updated in sync with the datepicker selections. This and the following
+ *     setting allow you to automatically show selected dates in one format for the user, while maintaining a
+ *     second field with a more useful format for further processing. The alternate field may be specified as
+ *     either the element itself, a jQuery collection containing the element, or a string selector for the
+ *     desired element.
+ *
+ *   - #datepicker_alt_format: String typed, default is NULL.
+ *     Use in conjunction with the #alt_field to automatically maintain two different views of the selected
+ *     date(s). See the #date_format setting for the list of possible values.
+ *
+ *   - #datepicker_constrain_input: Boolean typed, default is TRUE.
+ *     Set to TRUE to only allow the entry of characters specified by the #date_format, or FALSE to
+ *     allow any characters.
+ *
+ *   - #datepicker_commands_as_date_format: Boolean typed, default is FALSE.
+ *     Set to TRUE to apply the jQuery World Calendars formatDate() to all command display text.
+ *     This allows you to label commands with the dates to which they refer, for example the previous and next
+ *     links could show the month to which they move. Remember to quote (') any command text you do not want substituted.
+ *
+ *   - #datepicker_commands: JS object typed, default is $.calendars.picker.commands.
+ *     Read more at http://keith-wood.name/calendarsPickerRef.html#commandsobj
+ *
+ *   - #datepicker_extra: Boolean typed, default is FALSE.
+ *     Indicates whether to add the picker.ext component or not. This might be added as a mandatory dependency
+ *     by jQuery World Calendars module even though you set this to FALSE.
+ *
+ *   - #datepicker_theme: String typed, valid within available jQuery Calendars themes, default is set via jQuery Calendars.
+ *     Indicates which jQuery Calendard Datepicker theme to use. Please note that the code is not gonna resolve CSS conflicts.
+ *
+ * @see jquery_calendars_add()
+ * @see http://keith-wood.name/calendarsPickerRef.html
+ *
+ * @todo
+ *   TODO: Resolve that CDate issue by defining a fake CDate PHP class or accepting an array.
+ *   Document the allowed values of #datepicker_date_format.
  */
 function datepicker_elements() {
-  return array();
+  return array(
+    'datepicker' => array(
+      '#input' => TRUE,
+      '#tree' => TRUE,
+      '#process' => array('datepicker_process'),
+      '#element_validate' => array('datepicker_validate'),
+      // And the show begins..
+      '#datepicker_calendar' => 'gregorian',
+      '#datepicker_locale' => 'en',
+      '#datepicker_locales' => array(),
+      '#datepicker_picker_class' => '',
+      '#datepicker_show_on_focus' => TRUE,
+      '#datepicker_show_trigger' => NULL,
+      '#datepicker_show_anim' => 'show',
+      '#datepicker_show_speed' => 'normal',
+      '#datepicker_popup_container' => NULL,
+      '#datepicker_alignment' => 'bottom',
+      '#datepicker_fixed_weeks' => FALSE,
+      '#datepicker_first_day' => 0,
+      '#datepicker_calculate_week' => NULL,
+      '#datepicker_months_to_show' => 1,
+      '#datepicker_months_offset' => 0,
+      '#datepicker_months_to_step' => 1,
+      '#datepicker_months_to_jump' => 12,
+      '#datepicker_use_mouse_weel' => TRUE,
+      '#datepicker_change_month' => TRUE,
+      '#datepicker_year_range' => 'c-10:c+10',
+      '#datepicker_show_other_months' => FALSE,
+      '#datepicker_select_other_months' => FALSE,
+      '#datepicker_default_date' => NULL,
+      '#datepicker_select_default_date' => FALSE,
+      '#datepicker_min_date' => NULL,
+      '#datepicker_max_date' => NULL,
+      '#datepicker_date_format' => NULL,
+      '#datepicker_auto_size' => FALSE,
+      '#datepicker_range_select' => FALSE,
+      '#datepicker_range_separator' => '-',
+      '#datepicker_multi_select' => 0,
+      '#datepicker_multi_separator' => ',',
+      '#datepicker_on_date' => NULL,
+      '#datepicker_on_show' => NULL,
+      '#datepicker_on_change_month_year' => NULL,
+      '#datepicker_on_select' => NULL,
+      '#datepicker_on_close' => NULL,
+      '#datepicker_alt_field' => NULL,
+      '#datepicker_alt_format' => NULL,
+      '#datepicker_constrain_input' => TRUE,
+      '#datepicker_commands_as_date_format' => FALSE,
+      '#datepicker_commands' => '$.calendars.picker.commands',
+      '#datepicker_extra' => FALSE,
+      '#datepicker_theme' => variable_get('jquery_calendars_datepicker_theme', 'smoothness'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function datepicker_theme() {
+  return array(
+    'datepicker' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+
+/**
+ * Datepicker theme callback.
+ *
+ * @param $element
+ *   An array of form element properties.
+ *
+ * @return
+ *   Form element themed output.
+ *
+ * @todo Make it possible to theme various types of datepickers.
+ */
+function theme_datepicker($element) {
+  static $js_loaded = FALSE;
+
+  // Initilize the output variables.
+  $output = '';
+  $size = empty($element['#size']) ? '' : ' size="' . $element['#size'] . '"';
+  $maxlength = empty($element['#maxlength']) ? '' : ' maxlength="' . $element['#maxlength'] . '"';
+
+  // Set the appropriate element classes.
+  _form_set_class($element, array('form-text', 'form-text-datepicker'));
+
+  // Prepend the prefix if available.
+  if (isset($element['#field_prefix'])) {
+    $output .= '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ';
+  }
+
+  // The HTML input element.
+  $output .= '<input type="text"' . $maxlength . ' name="' . $element['#name'] . '" id="' . $element['#id'] . '"' . $size . ' value="' . check_plain($element['#value']) . '"' . drupal_attributes($element['#attributes']) . ' />';
+
+  // Append the suffix if available.
+  if (isset($element['#field_suffix'])) {
+    $output .= ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>';
+  }
+
+  // Add appropriate jQuery Calendars components.
+  // jQuery Calendars module itself takes care of dups n' deps!
+  $components = array('picker');
+  if ($element['#datepicker_calendar'] != 'gregorian') {
+    $components[] = $element['#datepicker_calendar'];
+  }
+  if ($element['#datepicker_extra']) {
+    $components[] = 'picker.ext';
+  }
+
+  jquery_calendars_add($components, $element['#datepicker_locales'], $element['#datepicker_theme']);
+  unset($components);
+
+  // Port the element's specific properties to JS,
+  // so our Datepicker behavior can do his own part.
+  _datepicker_expose_element($element);
+
+  // Attach the behavior, if not yet attached.
+  if (!$js_loaded) {
+    drupal_add_js(drupal_get_path('module', 'datepicker') . '/datepicker.js', 'module');
+    $js_loaded = TRUE;
+  }
+
+  return theme('form_element', $element, $output);
+}
+
+
+/**
+ * Datepicker element process callback.
+ */
+function datepicker_process($element, $edit, $form_state, $complete_form) {
+  return $element;
+}
+
+
+/**
+ * Datepicker element validation callback.
+ */
+function datepicker_validate($element, &$form_state) {
+  
+}
+
+
+/**
+ * Helper function to expose a datepicker settings to JS.
+ *
+ * @param $element
+ *   Element array.
+ */
+function _datepicker_expose_element($element) {
+  $settings = array('datepicker' => array());
+
+  // Set initials.
+  $settings['datepicker'][$element['#id']] = array(
+    'options' => array(),
+    'locale' => $element['#datepicker_locale'],
+    'calendar' => $element['#datepicker_calendar'],
+    'commands' => $element['#datepicker_commands'],
+  );
+
+  // Remove additionals.
+  unset(
+    $element['#datepicker_theme'],
+    $element['#datepicker_extra'],
+    $element['#datepicker_locale'],
+    $element['#datepicker_locales'],
+    $element['#datepicker_calendar'],
+    $element['#datepicker_commands']
+  );
+
+  // Walkthrough the element array and make that JS object as
+  // per required by jQuery World Calendars Datepicker component.
+  foreach ($element as $key => $value) {
+    if (strpos($key, '#datepicker_') !== FALSE) {
+      $settings['datepicker'][$element['#id']]['options'][_datepicker_convert_case($key)] = $value;
+    }
+  }
+
+  drupal_add_js($settings, 'setting');
+  dpm($settings);
+}
+
+
+/**
+ * Helper function to convert a camel_case string to its camelCase equivalent.
+ *
+ * @param $str
+ *   A string in camel_case.
+ * @param $capitalize
+ *   If TRUE, also capitalizes the first char (CamelCase).
+ *
+ * @return
+ *   camelCased equivalent of $str.
+ */
+function _datepicker_convert_case($str, $capitalize = FALSE) {
+  // Remove prefix.
+  $str = str_replace('#datepicker_', '', $str);
+
+  // Capitalize if required.
+  if ($capitalize) {
+    $str[0] = strtoupper($str[0]);
+  }
+
+  return preg_replace_callback(
+    '/_([a-z])/',
+    create_function('$str', 'return strtoupper($str[1]);'),
+    $str
+  );
+}
+
+
+########################### DEBUG
+/**
+ * Implements hook_form_alter() for testing purposes.
+ */
+function datepicker_form_alter(&$form, $form_state, $form_id) {
+  if (strstr($form_id, '_node_form') !== FALSE) {
+    $form['author']['date']['#type'] = 'datepicker';
+    $form['author']['date']['#datepicker_calendar'] = 'persian';
+    $form['author']['date']['#datepicker_locale'] = 'fa';
+    $form['author']['date']['#datepicker_locales'] = array('persian-fa', 'datepicker-fa');
+    $form['author']['date']['#datepicker_show_anim'] = 'fadeIn';
+  }
 }
 
