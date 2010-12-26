@@ -425,6 +425,18 @@ function theme_datepicker($element) {
 
 
 /**
+ * Implements form_type_hook_value().
+ *
+ * @TODO Implement.
+ */
+function form_type_datepicker_value($form, $edit = FALSE) {
+  if ($edit !== FALSE) {
+    return $edit;
+  }
+}
+
+
+/**
  * Datepicker element process callback.
  */
 function datepicker_process($element, $edit, $form_state, $complete_form) {
