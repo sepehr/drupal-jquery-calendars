@@ -133,7 +133,7 @@
  *     Set to TRUE to allow the days in other months that appear in the partial weeks before or after the
  *     current month to be selected. This setting only applies if #datepicker_show_other_months is TRUE.
  *
- *   - #datepicker_default_date: String or array typed, default is NULL to use current date.
+ *   - #datepicker_default_date: String or array typed, default is NULL which uses current date.
  *     Specify the date to show if no other date has been selected. This may be specified as an actual
  *     date (CDate), or a date string in the current #datepicker_date_format, as a number of days relative to today,
  *     or as a string of offsets and periods relative to today. For the last use 'y' for years, 'm' for months,
@@ -291,6 +291,7 @@
  *   - Resolve the issue of #default_date and #default_value properties.
  *   - Make the PHP date formats acceptable by the form element.
  *   - Accept TimeEntry element properties.
+ *   - Fix #datepicker_commands JS port.
  */
 function datepicker_elements() {
   return array(
@@ -373,7 +374,7 @@ function datepicker_theme() {
  * @todo Make it possible to theme various types of datepickers.
  */
 function theme_datepicker($element) {
-  static $js_loaded = FALSE;
+  static $loaded = FALSE;
 
   // Initilize the output variables.
   $output = '';
@@ -414,9 +415,9 @@ function theme_datepicker($element) {
   _datepicker_expose_element($element);
 
   // Attach the behavior, if not yet attached.
-  if (!$js_loaded) {
+  if (!$loaded) {
     drupal_add_js(drupal_get_path('module', 'datepicker') . '/datepicker.js', 'module');
-    $js_loaded = TRUE;
+    $loaded = TRUE;
   }
 
   return theme('form_element', $element, $output);
@@ -440,7 +441,7 @@ function datepicker_validate($element, &$form_state) {
 
 
 /**
- * Helper function to expose a datepicker settings to JS.
+ * Helper function to expose a datepicker settings to JS!
  *
  * @param $element
  *   Element array.
@@ -475,7 +476,6 @@ function _datepicker_expose_element($element) {
   }
 
   drupal_add_js($settings, 'setting');
-  dpm($settings);
 }
 
 
@@ -508,16 +508,13 @@ function _datepicker_convert_case($str, $capitalize = FALSE) {
 
 
 ########################### DEBUG
+
 /**
  * Implements hook_form_alter() for testing purposes.
  */
 function datepicker_form_alter(&$form, $form_state, $form_id) {
   if (strstr($form_id, '_node_form') !== FALSE) {
     $form['author']['date']['#type'] = 'datepicker';
-    $form['author']['date']['#datepicker_calendar'] = 'persian';
-    $form['author']['date']['#datepicker_locale'] = 'fa';
-    $form['author']['date']['#datepicker_locales'] = array('persian-fa', 'datepicker-fa');
-    $form['author']['date']['#datepicker_show_anim'] = 'fadeIn';
   }
 }
 
