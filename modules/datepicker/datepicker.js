@@ -16,7 +16,7 @@ Drupal.behaviors.datepicker = function(context) {
     // Initialize the Calendar.
     datepicker.options.calendar = $.calendars.instance(datepicker.calendar, datepicker.locale);
 
-    // The command object. Eval is Evil, I know!
+    // And the Evil Eval!
     // datepicker.options.commands = eval(datepicker.calendar.commands);
 
     // And initialize the Datepicker.
