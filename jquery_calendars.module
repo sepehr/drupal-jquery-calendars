@@ -74,7 +74,7 @@ function jquery_calendars_admin_settings() {
   $theme = variable_get('jquery_calendars_datepicker_theme', 'smoothness');
   $form['jquery_calendars_datepicker_theme'] = array(
     '#type' => 'select',
-    '#title' => t('Datepicker theme'),
+    '#title' => t('Datepicker default theme'),
     '#description' => t('Choose which datepicker theme you want to use. This will override datepicker theme settings set by other modules. You can add your own customized theme by placing it into the <code><u>!dir</u></code> directory respecting this filename format: <strong><em>theme-name</em>.calendars.picker.css</strong>',
       array('!dir' => 'sites/all/libraries/jquery.calendar')
     ),
