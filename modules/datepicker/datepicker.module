@@ -286,9 +286,11 @@
  * @see jquery_calendars_add()
  * @see http://keith-wood.name/calendarsPickerRef.html
  *
- * @todo
- *   TODO: Resolve that CDate issue by defining a fake CDate PHP class or accepting an array.
- *   Document the allowed values of #datepicker_date_format.
+ * @TODO
+ *   - Resolve that CDate issue by defining a fake CDate PHP class or accepting an array.
+ *   - Resolve the issue of #default_date and #default_value properties.
+ *   - Make the PHP date formats acceptable by the form element.
+ *   - Accept TimeEntry element properties.
  */
 function datepicker_elements() {
   return array(
