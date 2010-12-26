@@ -168,14 +168,14 @@ function jquery_calendars_preprocess_page(&$vars) {
 
 /**
  * API function to include specified jQuery Calendars
- * library components. It also takes care of dependencies.
+ * library components while trying to take care of dups n' deps.
  *
  * @param $components
  *   Library components that should be loaded on the page.
  *   Either a string with a single filename or comma-separated
  *   filenames. Also it accepts an array of filenames.
- *   Valid values are:
- *   - all
+ *   Allowed values are:
+ *   - all: contains base, plus and datepicker components together.
  *   - base
  *   - plus
  *   - picker
@@ -193,7 +193,10 @@ function jquery_calendars_preprocess_page(&$vars) {
  * @param $locales
  *   Library localization files that should be loaded on the page.
  *   This can be an array, a single string or a comma-separated one.
- *   Valid values are:
+ *   Note that compressions for these components are not available.
+ *   Allowed values are:
+ *   - lang: contains all Gregorian calendar locales.
+ *   - picker.lang: contains all datepicker locales.
  *   - taiwan-zh-TW
  *   - thai-th
  *   - persian-fa
@@ -328,10 +331,12 @@ function jquery_calendars_preprocess_page(&$vars) {
  *
  * @see http://keith-wood.name/calendars.html
  * @see http://keith-wood.name/calendarsPicker.html
+ *
+ * @todo: Add validation API for component availability.
  */
-function jquery_calendars_add($components = array(), $locales = array(), $theme = 'smoothness', $compression = 'normal') {
+function jquery_calendars_add($components = array(), $locales = array(), $theme = '', $compression = '') {
   static $loaded = array('files' => array());
-  $compression = variable_get('jquery_calendars_compression_level', $compression);
+  $compression = !empty($compression) ? $compression : variable_get('jquery_calendars_compression_level', 'pack');
 
   // Convert input parameters to array.
   list($components, $locales) = _jquery_calendars_input_to_array($components, $locales);
@@ -339,13 +344,13 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
   // Clean locales and append 'em to components.
   $length = count($locales);
   for ($i = 0; $i < $length; ++$i) {
+    // Remove the gregorian prefix from locale packages.
     if (strpos($locales[$i], 'gregorian') !== FALSE) {
       $locales[$i] = str_replace('gregorian', '', $locales[$i]);
     }
   }
   $components = array_merge($components, $locales);
   unset($length, $locales);
-
 
   // Load library base.
   if (!isset($loaded['all']) && in_array('all', $components)) {
@@ -386,7 +391,7 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
   // Add datepicker themes.
   // TODO: Add themeroller and jQuery.UI support.
   if (isset($loaded['picker'])) {
-    $theme = variable_get('jquery_calendars_datepicker_theme', $theme);
+    $theme = !empty($theme) ? $theme : variable_get('jquery_calendars_datepicker_theme', 'smoothness');
 
     // Add datepicker theme style.
     $path = _jquery_calendars_component_path('picker', '', 'css', $theme . '.calendars');
@@ -415,7 +420,12 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
  */
 function _jquery_calendars_component_path($component, $compression, $extension = 'js', $prefix = 'jquery.calendars') {
   $path = _jquery_calendars_path() . '/' . $prefix;
-  $compression = (empty($compression) || $compression == 'normal') ? '' : '.' . $compression;
+
+  // Fix compression level if required.
+  $compression = ($compression == 'normal' || empty($compression) || strpos($component, '-') !== FALSE) ?
+    '' : '.' . $compression;
+
+  // Fix component name if required.
   if ($component[0] != '-') {
     $component = (empty($component) || $component == 'base') ? '' : '.' . $component;
   }
