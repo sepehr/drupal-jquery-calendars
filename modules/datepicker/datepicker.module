@@ -4,7 +4,24 @@
 /**
  * @file
  * Implements necessary hooks, API and helpers for Form Datepicker Element.
+ *
+ * @todo
+ * Add more documentation comments.
  */
+
+/**
+ * Defines datepicker's date format types.
+ */
+define('DATEPICKER_JS', 0);
+define('DATEPICKER_PHP', 1);
+
+/**
+ * Defines datepicker's date format parts.
+ */
+define('DATEPICKER_TIME', 'time');
+define('DATEPICKER_DATE', 'date');
+define('DATEPICKER_BOTH', 'both');
+
 
 /**
  * Implements hook_elements().
@@ -161,7 +178,7 @@
  *     or 'd' for days. Multiple offsets may be combined in the one string. Set to NULL for no maximum.
  *     Example values are as for #datepicker_default_date.
  *
- *   - #datepicker_date_format: String typed, default is NULL.
+ *   - #datepicker_date_format: String typed, default is set to Drupal 'date_format_short' variable.
  *     Specify the format applied to the selected dates. This may be any combination of the values below.
  *     To use any of these characters without substitution you must surround them in single quotes (').
  *     If set to NULL the default date format specified by the calendar is used instead.
@@ -299,7 +316,6 @@ function datepicker_elements() {
       '#input' => TRUE,
       '#tree' => TRUE,
       '#process' => array('datepicker_process'),
-      '#element_validate' => array('datepicker_validate'),
       // And the show begins..
       '#datepicker_calendar' => 'gregorian',
       '#datepicker_locale' => 'en',
@@ -327,7 +343,6 @@ function datepicker_elements() {
       '#datepicker_select_default_date' => FALSE,
       '#datepicker_min_date' => NULL,
       '#datepicker_max_date' => NULL,
-      '#datepicker_date_format' => NULL,
       '#datepicker_auto_size' => FALSE,
       '#datepicker_range_select' => FALSE,
       '#datepicker_range_separator' => '-',
@@ -345,6 +360,9 @@ function datepicker_elements() {
       '#datepicker_commands' => '$.calendars.picker.commands',
       '#datepicker_extra' => FALSE,
       '#datepicker_theme' => variable_get('jquery_calendars_datepicker_theme', 'smoothness'),
+      '#datepicker_date_format' => _datepicker_format_convert(
+        variable_get('date_format_short', 'Y/m/d'), DATEPICKER_JS, FALSE
+      ),
     ),
   );
 }
@@ -412,7 +430,7 @@ function theme_datepicker($element) {
 
   // Port the element's specific properties to JS,
   // so our Datepicker behavior can do his own part.
-  _datepicker_expose_element($element);
+  _datepicker_element_js($element);
 
   // Attach the behavior, if not yet attached.
   if (!$loaded) {
@@ -425,30 +443,21 @@ function theme_datepicker($element) {
 
 
 /**
- * Implements form_type_hook_value().
- *
- * @TODO Implement.
- */
-function form_type_datepicker_value($form, $edit = FALSE) {
-  if ($edit !== FALSE) {
-    return $edit;
-  }
-}
-
-
-/**
  * Datepicker element process callback.
+ *
+ * Converts the passed date sent via jQuery World Calendars to a
+ * Drupal readable calendar and format. This uses Calendar Framework API.
  */
-function datepicker_process($element, $edit, $form_state, $complete_form) {
+function datepicker_process($element, $edit, &$form_state, $complete_form) {
+  if ($edit) {
+    $format = _datepicker_format_convert($element['#datepicker_date_format'], DATEPICKER_PHP, TRUE);
+    list($date_format, $time_format) = _datepicker_format_explode($format, DATEPICKER_BOTH);
+
+    // TODO: Extract the values from the element value based on the format.
+    // Then convert it to a valid timestamp and then a valid Y/m/d H:i:s formatted date.
+  }
+
   return $element;
-}
-
-
-/**
- * Datepicker element validation callback.
- */
-function datepicker_validate($element, &$form_state) {
-  
 }
 
 
@@ -458,13 +467,13 @@ function datepicker_validate($element, &$form_state) {
  * @param $element
  *   Element array.
  */
-function _datepicker_expose_element($element) {
+function _datepicker_element_js($element) {
   $settings = array('datepicker' => array());
 
   // Set initials.
   $settings['datepicker'][$element['#id']] = array(
     'options' => array(),
-    'locale' => $element['#datepicker_locale'],
+    'locale'  => $element['#datepicker_locale'],
     'calendar' => $element['#datepicker_calendar'],
     'commands' => $element['#datepicker_commands'],
   );
@@ -483,7 +492,7 @@ function _datepicker_expose_element($element) {
   // per required by jQuery World Calendars Datepicker component.
   foreach ($element as $key => $value) {
     if (strpos($key, '#datepicker_') !== FALSE) {
-      $settings['datepicker'][$element['#id']]['options'][_datepicker_convert_case($key)] = $value;
+      $settings['datepicker'][$element['#id']]['options'][_datepicker_case_convert($key)] = $value;
     }
   }
 
@@ -502,7 +511,7 @@ function _datepicker_expose_element($element) {
  * @return
  *   camelCased equivalent of $str.
  */
-function _datepicker_convert_case($str, $capitalize = FALSE) {
+function _datepicker_case_convert($str, $capitalize = FALSE) {
   // Remove prefix.
   $str = str_replace('#datepicker_', '', $str);
 
@@ -519,8 +528,113 @@ function _datepicker_convert_case($str, $capitalize = FALSE) {
 }
 
 
-########################### DEBUG
+/**
+ * Helper function to convert date formats between PHP and JS.
+ *
+ * @param $format
+ *   The format string to be converted.
+ * @param $to
+ *   The target language to convert formats for.
+ *   - DATEPICKER_JS
+ *   - DATEPICKER_PHP (default)
+ * @param $time
+ *   Whether to keep time specific formattings in the string or not.
+ *   If FALSE this will remove all PHP formattings form the $format string.
+ *
+ * @return
+ *   Converted date format string.
+ */
+function _datepicker_format_convert($format, $to = DATEPICKER_PHP, $time = FALSE) {
+  $pairs = array(
+    'd'  => 'j',
+    'dd' => 'd',
+    'D'  => 'D',
+    'DD' => 'l',
+    'o'  => 'z',
+    'oo' => 'z',
+    'w'  => 'W',
+    'ww' => 'W',
+    'm'  => 'n',
+    'mm' => 'm',
+    'M'  => 'M',
+    'MM' => 'F',
+    'yy' => 'y',
+    '@'  => 'U',
+    'yyyy' => 'Y',
+    'YYYY' => 'Y',
+  );
 
+  switch (strtoupper($to)) {
+    case DATEPICKER_PHP:
+      return strtr(str_replace(array('J', '!'), '', $format), $pairs);
+
+    case DATEPICKER_JS:
+      if (!$time) {
+        $format = _datepicker_format_explode($format, DATEPICKER_DATE);
+      }
+      return str_replace(array_values($pairs), array_keys($pairs), $format);
+  }
+}
+
+
+/**
+ * Helper function to explode a date format string to its date and time parts.
+ *
+ * @param $format
+ *   Format string.
+ * @params $parts
+ *   Indicates which parts to return.
+ *   - DATEPICKER_BOTH (default)
+ *   - DATEPICKER_TIME
+ *   - DATEPICKER_DATE
+ *
+ * @return
+ *   An array of exploded $format with the date part
+ *   in first element and the time part in second one.
+ *
+ * @todo Rethink & improve the regex pattern, if possible.
+ */
+function _datepicker_format_explode($format, $parts = DATEPICKER_BOTH) {
+  $date = $time = '';
+  $trim_chars = '-|\/,._~:; ';
+  $time_chars = 'hHisaAgGeIOPTZ';
+
+  if (preg_match("/[$time_chars]+/", $format, $m)) {
+    $count = 0;
+    $date = $time = $format;
+    $date_chars = 'jdDlzWnmMFyUY';
+    $both_chars = $date_chars . $time_chars;
+    $separators = '\-|\/|,|\s|\.|_|~|:|;|\|';
+
+    while (++$count > 5 || preg_match("/[$time_chars]+/", $date) || preg_match("/[$date_chars]+/", $time)) {
+      $date = preg_replace("/(([$both_chars]+[$separators]*){{$count}}[$both_chars]+)(.*)/", '$1', $format);
+      $time = preg_replace("/(([$both_chars]+[$separators]*){{$count}}[$both_chars]+)(.*)/", '$3', $format);
+      if (preg_match("/[$time_chars]+/", $date)) {
+        list($date, $time) = array($time, $date);
+      }
+    }
+  }
+  else {
+    $date = $format;
+  }
+
+  switch ($parts) {
+    case DATEPICKER_BOTH:
+      return array(
+        trim($date, $trim_chars),
+        trim($time, $trim_chars),
+      );
+
+    default:
+      return trim($$parts, $trim_chars);
+  }
+}
+
+
+########################### DEBUG
+function datepicker_init() {
+
+}
 /**
  * Implements hook_form_alter() for testing purposes.
  */
