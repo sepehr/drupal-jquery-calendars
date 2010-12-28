@@ -451,13 +451,30 @@ function theme_datepicker($element) {
 function datepicker_process($element, $edit, &$form_state, $complete_form) {
   if ($edit) {
     $format = _datepicker_format_convert($element['#datepicker_date_format'], DATEPICKER_PHP, TRUE);
-    list($date_format, $time_format) = _datepicker_format_explode($format, DATEPICKER_BOTH);
-
+    $format = _datepicker_format_explode($format, DATEPICKER_DATE);
+    
+    // Extracting date components.
+    if ($format) {
+      calendar_framework_call();
+      
+      dpr($element['#value']);
+      dpr($date);
+      die();
+    }
+    
     // TODO: Extract the values from the element value based on the format.
     // Then convert it to a valid timestamp and then a valid Y/m/d H:i:s formatted date.
   }
 
   return $element;
+}
+
+
+/**
+ * Datepicker element validation callback.
+ */
+function datepicker_validate() {
+
 }
 
 
@@ -633,7 +650,7 @@ function _datepicker_format_explode($format, $parts = DATEPICKER_BOTH) {
 
 ########################### DEBUG
 function datepicker_init() {
-
+  dpm( calendar_framework_call('format callback', array(time(), 'Y-m-d H:i:s', variable_get('date_default_timezone', 0))) );
 }
 /**
  * Implements hook_form_alter() for testing purposes.
