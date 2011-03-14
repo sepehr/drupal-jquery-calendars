@@ -10,7 +10,6 @@
  */
 define(JQUERY_CALENDARS_JQUERY, '/jquery-1.4.2.min.js');
 
-
 /**
  * Implements hook_perm().
  */
@@ -18,9 +17,11 @@ function jquery_calendars_perm() {
   return array('administer jquery calendars');
 }
 
-
 /**
  * Implements hook_init().
+ *
+ * @todo
+ *   Move the code to Status reports page.
  */
 function jquery_calendars_init() {
   $requirements = array_pop(_jquery_calendars_requirements_check());
@@ -29,7 +30,6 @@ function jquery_calendars_init() {
     drupal_set_message($requirements['description'], 'error', FALSE);
   }
 }
-
 
 /**
  * Implements hook_menu().
@@ -48,7 +48,6 @@ function jquery_calendars_menu() {
   return $items;
 }
 
-
 /**
  * Form callback for jQuery World Calendars administration.
  *
@@ -57,7 +56,7 @@ function jquery_calendars_menu() {
  */
 function jquery_calendars_admin_settings() {
   $form = array();
-
+  // Library compression level.
   $form['jquery_calendars_compression_level'] = array(
     '#type' => 'radios',
     '#title' => t('Library compression level'),
@@ -69,7 +68,7 @@ function jquery_calendars_admin_settings() {
       'normal' => t('No Compression - <em>30.3K core.</em>'),
     ),
   );
-
+  // Calendars default theme.
   $theme = variable_get('jquery_calendars_datepicker_theme', 'smoothness');
   $form['jquery_calendars_datepicker_theme'] = array(
     '#type' => 'select',
@@ -81,25 +80,24 @@ function jquery_calendars_admin_settings() {
     '#options' => _jquery_calendars_datepicker_themes(),
   );
 
-  // Add a datepicker demo.
+  // Datepicker demonstration.
   global $base_path;
+  // Demo wrapper fieldset.
   $form['datepicker_demo_wrapper'] = array(
     '#type' => 'fieldset',
     '#title' => t('Datepicker Demo'),
-    '#description' => t('This is a jQuery World Calendars Datepicker demo based on your current saved settings. You might want to read <a href="!module">module</a> and <a href="!library">library</a> API docs.',
-      array(
-        '!library' => 'http://keith-wood.name/calendarsRef.html',
-        '!module' => $base_path . drupal_get_path('module', 'jquery_calendars') . '/README.txt',
-      )
-    ),
+    '#description' => t('This is a jQuery World Calendars Datepicker demo based on your current saved settings. You might want to read <a href="!module">module</a> and <a href="!library">library</a> API docs.', array(
+      '!library' => 'http://keith-wood.name/calendarsRef.html',
+      '!module' => $base_path . drupal_get_path('module', 'jquery_calendars') . '/README.txt',
+    )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-
+  // Demo itself.
   $form['datepicker_demo_wrapper']['demo'] = array(
     '#type' => 'markup',
     '#value' => '<select id="datepicker-demo-calendars">
-      <option value="gregorian">' . t('Gregorian') . '</option>
+      <option val// Load library base.ue="gregorian">' . t('Gregorian') . '</option>
       <option value="persian">' . t('Persian') . '</option>
       <option value="thai">' . t('Thai') . '</option>
       <option value="mayan">' . t('Mayan') . '</option>
@@ -111,8 +109,7 @@ function jquery_calendars_admin_settings() {
     </select>
     <div id="datepicker-demo"></div>',
   );
-
-  // API use & Javascript stuffs.
+  // API usage & Javascript stuffs.
   $path = drupal_get_path('module', 'jquery_calendars');
   jquery_calendars_add('picker, picker.ext, hebrew, persian, taiwan, thai, islamic, ethiopian, coptic, mayan', array(), $theme);
   drupal_add_js($path . '/jquery_calendars.js');
@@ -121,7 +118,6 @@ function jquery_calendars_admin_settings() {
   return system_settings_form($form);
 }
 
-
 /**
  * Implements hook_theme_registry_alter().
  *
@@ -129,41 +125,37 @@ function jquery_calendars_admin_settings() {
  */
 function jquery_calendars_theme_registry_alter(&$theme_registry) {
   if (isset($theme_registry['page'])) {
+    // Remove if it's already existing.
     if ($key = array_search('jquery_calendars_preprocess_page', $theme_registry['page']['preprocess functions'])) {
       unset($theme_registry['page']['preprocess functions'][$key]);
     }
-
+    // And append.
     $theme_registry['page']['preprocess functions'][] = 'jquery_calendars_preprocess_page';
   }
 }
 
-
 /**
  * Implements jquery_calendars_hook_preprocess_hook().
  *
- * Strips out the core jQuery v1.2 and adds a 1.4.x one.
- * It's a minified jquery_update.module in heart :)
+ * Strips out the core jQuery v1.2 and adds a 1.4.x one,
+ * In fact it's a tiny jQuery Update module at its heart.
  */
 function jquery_calendars_preprocess_page(&$vars) {
   global $_jquery_calendars;
-
+  // Check if we need to replace the jQuery file.
   if ($_jquery_calendars == TRUE && !empty($vars['scripts'])) {
     $scripts = drupal_add_js();
-
     // Add the 1.4.x one.
-    $scripts['core'] = array_merge(array(
-      _jquery_calendars_path('jquery') . JQUERY_CALENDARS_JQUERY => $scripts['core']['misc/jquery.js']),
+    $scripts['core'] = array_merge(
+      array(_jquery_calendars_path('jquery') . JQUERY_CALENDARS_JQUERY => $scripts['core']['misc/jquery.js']),
       $scripts['core']
     );
-
     // Remove core's jQuery.
     unset($scripts['core']['misc/jquery.js']);
-
     // Let 'em go!
     $vars['scripts'] = drupal_get_js('header', $scripts);
   }
 }
-
 
 /**
  * API function to include specified jQuery Calendars
@@ -351,7 +343,7 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
   $components = array_merge($components, $locales);
   unset($length, $locales);
 
-  // Load library base.
+  // See if we should add all of the library components.
   if (!isset($loaded['all']) && in_array('all', $components)) {
     $loaded['all'] = $loaded['base'] =
     $loaded['plus'] = $loaded['picker'] =
@@ -360,6 +352,7 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
     $loaded['files']['picker'] = TRUE;
     jquery_calendars_add(array('all'));
   }
+  // Elseway load the library base.
   elseif (!isset($loaded['base'])) {
     $loaded['base'] = TRUE;
     jquery_calendars_add(array('base'));
@@ -375,10 +368,11 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
       $loaded['picker'] = TRUE;
       jquery_calendars_add(array('picker'));
     }
-
     // Load the component itself.
     if (!isset($loaded['files'][$component])) {
       $path = _jquery_calendars_component_path($component, $compression);
+      // If the component file exists,
+      // include and set appropriate flags.
       if (file_exists($path)) {
         drupal_add_js($path);
         $loaded[$component] = TRUE;
@@ -387,20 +381,19 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
     }
   }
 
-  // Add datepicker themes.
+  // Add datepicker themes, if required.
   // TODO: Add themeroller and jQuery.UI support.
   if (isset($loaded['picker'])) {
+    // Override the default theme, if necessary.
     $theme = !empty($theme) ? $theme : variable_get('jquery_calendars_datepicker_theme', 'smoothness');
-
     // Add datepicker theme style.
-    $path = _jquery_calendars_component_path('picker', '', 'css', $theme . '.calendars');
+    $path = _jquery_calendars_component_path('picker', '', 'css', "$theme.calendars");
     drupal_add_css($path);
   }
 
   // We're done.
   $GLOBALS['_jquery_calendars'] = TRUE;
 }
-
 
 /**
  * Helper function to build a library component path.
@@ -419,11 +412,9 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
  */
 function _jquery_calendars_component_path($component, $compression, $extension = 'js', $prefix = 'jquery.calendars') {
   $path = _jquery_calendars_path() . '/' . $prefix;
-
   // Fix compression level if required.
   $compression = ($compression == 'normal' || empty($compression) || strpos($component, '-') !== FALSE) ?
     '' : '.' . $compression;
-
   // Fix component name if required.
   if ($component[0] != '-') {
     $component = (empty($component) || $component == 'base') ? '' : '.' . $component;
@@ -431,7 +422,6 @@ function _jquery_calendars_component_path($component, $compression, $extension =
 
   return $path . $component . $compression . '.' . $extension;
 }
-
 
 /**
  * Helper function to get the library path using Libraries module API.
@@ -455,26 +445,25 @@ function _jquery_calendars_path($library = 'jquery.calendars', $filename = '') {
   $path = libraries_get_path($library);
   $directory = file_scan_directory($path, '.*', array('.', '..'));
   $exists = (!empty($filename)) ? file_exists($path . '/' . $filename) : TRUE;
-
+  // If all is set, return the path.
   if (is_dir($path) && $exists && !empty($directory)) {
     return $path;
   }
-
+  // Or #fail.
   return FALSE;
 }
 
-
 /**
- * Helper function for module requirements check.
+ * Helper function that checks module requirements.
  *
  * @return
- *   An array as required by hook_requirements().
+ *   An array as per required by hook_requirements().
  */
 function _jquery_calendars_requirements_check() {
   $t = get_t();
   $requirements = array();
   $libraries = array(_jquery_calendars_path('jquery.calendars'), _jquery_calendars_path('jquery'));
-
+  // Check jQuery Calendars.
   if (!$libraries[0]) {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_ERROR;
     $requirements['jquery_calendars']['description'] = $t('The <a href="!library">jQuery World Calendars</a> plugin is missing. <a href="!download">Download</a> the library and extract it to <code>sites/all/libraries/</code> directory. Also you need to rename the extracted directory to <strong>jquery.calendars</strong>.',
@@ -484,6 +473,7 @@ function _jquery_calendars_requirements_check() {
       )
     );
   }
+  // Check jQuery 1.4.x.
   elseif (!$libraries[1]) {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_ERROR;
     $requirements['jquery_calendars']['description'] = $t('The <em>jQuery World Calendars</em> plugin requires <a href="!library">jQuery 1.4.2+</a> library which is missing. <a href="!download">Download</a> the library and place it to <code>sites/all/libraries/jquery</code> directory. So it will be accessible via <code><strong>sites/all/libraries/jquery/jquery-1.4.2.min.js</strong></code> path.',
@@ -493,6 +483,7 @@ function _jquery_calendars_requirements_check() {
       )
     );
   }
+  // Requirements are satisfied.
   else {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_OK;
   }
@@ -500,9 +491,8 @@ function _jquery_calendars_requirements_check() {
   return $requirements;
 }
 
-
 /**
- * Helper function to collect all datepicker themes.
+ * Internal helper to collect all datepicker themes.
  *
  * @return
  *   An array of datepicker theme component names.
@@ -516,10 +506,11 @@ function _jquery_calendars_datepicker_themes() {
   ), FALSE, FALSE, 'name');
 
   foreach ($files as $key => $file) {
+    // Exluclude jQuery UI themes, for now.
     if (drupal_substr($key, 0, 2) == 'ui') {
       continue;
     }
-
+    // Loadup the array.
     $name = str_replace('.calendars.picker', '', $key);
     $themes[$name] = ucwords($name) . ' - ' . $file->basename;
   }
@@ -527,9 +518,8 @@ function _jquery_calendars_datepicker_themes() {
   return $themes;
 }
 
-
 /**
- * Helper function to convert a mixed-formatted input to an array.
+ * Internal helper to convert a mixed-formatted input to an array.
  *
  * @param
  *   Unlimited inputs.

@@ -3,3 +3,4 @@ description = "Provides jQuery World Calendars library API for other modules."
 package = "Calendar Framework"
 core = 6.x
 dependencies[] = libraries
+

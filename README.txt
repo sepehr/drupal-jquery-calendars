@@ -2,6 +2,10 @@ Description
 ===========
 Brings jQuery World Calendars API to Drupal.
 
+Disclaimer
+==========
+This module is in an early development stage, It is not intended to be used in production.
+
 Dependencies
 ============
 - Libraries API (http://drupal.org/project/libraries)

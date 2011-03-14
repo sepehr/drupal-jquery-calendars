@@ -11,31 +11,28 @@
 function jquery_calendars_requirements($phase) {
   // Module API is not available at this point.
   drupal_load('module', 'jquery_calendars');
-
   // Return the $requirements array.
   return _jquery_calendars_requirements_check();
 }
 
-
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function jquery_calendars_install() {
-  // Resolve the ajax_tabs incompatibility.
+  // Workaround the ajax_tabs incompatibility issue.
   $weight = db_result(db_query("SELECT weight FROM {system} WHERE type = 'module' AND name = 'ajax_tabs'"));
   db_query("UPDATE {system} SET weight = %d WHERE type = 'module' AND name = 'jquery_calendars'", ($weight ? $weight : 0) + 10);
-
+  // Notify user.
   drupal_set_message(st('jQuery World Calendars has been installed. Please set your settings in <a href="!link">configuration page</a>.',
     array('!link' => url('admin/settings/jquery-calendars'))
   ));
 }
 
-
 /**
  * Implements hook_uninstall().
  */
 function jquery_calendars_uninstall() {
-  variable_del('jquery_calendars_compression_level');
   variable_del('jquery_calendars_datepicker_theme');
+  variable_del('jquery_calendars_compression_level');
 }
 
