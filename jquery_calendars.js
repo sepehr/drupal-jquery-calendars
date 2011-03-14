@@ -1,5 +1,3 @@
-// $Id$
-
 /**
  * @file
  * Contains a jQuery World Calendars Datepicker demo javascript code.
@@ -18,7 +16,7 @@ Drupal.behaviors.jqueryCalendarsDemo = function(context) {
     showOtherMonths: false,
     calendar: $.calendars.instance($calendars.val()),
     onShow: $.calendars.picker.showStatus,
-    renderer: $.calendars.picker.weekOfYearRenderer, 
+    renderer: $.calendars.picker.weekOfYearRenderer,
     onSelect: function(date) {
       alert(Drupal.t('You picked @date.',
         {'@date': date[0].formatDate()}

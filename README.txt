@@ -1,5 +1,3 @@
-// $Id$
-
 Description
 ===========
 Provides jQuery World Calendars library API to other modules.

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * @file
  * Contains a jQuery World Calendars Datepicker demo stylesheets.
@@ -12,3 +10,4 @@
 .calendars-month-header select {
   max-width: 110px !important;
 }
+
