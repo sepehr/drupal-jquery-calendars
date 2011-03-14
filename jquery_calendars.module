@@ -18,20 +18,6 @@ function jquery_calendars_perm() {
 }
 
 /**
- * Implements hook_init().
- *
- * @todo
- *   Move the code to Status reports page.
- */
-function jquery_calendars_init() {
-  $requirements = array_pop(_jquery_calendars_requirements_check());
-
-  if ($requirements['severity'] == REQUIREMENT_ERROR) {
-    drupal_set_message($requirements['description'], 'error', FALSE);
-  }
-}
-
-/**
  * Implements hook_menu().
  */
 function jquery_calendars_menu() {
