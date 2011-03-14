@@ -340,8 +340,8 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
       $locales[$i] = str_replace('gregorian', '', $locales[$i]);
     }
   }
+  // Merge components and locales.
   $components = array_merge($components, $locales);
-  unset($length, $locales);
 
   // See if we should add all of the library components.
   if (!isset($loaded['all']) && in_array('all', $components)) {
