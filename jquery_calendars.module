@@ -98,7 +98,7 @@ function jquery_calendars_admin_settings() {
   $form['datepicker_demo_wrapper']['demo'] = array(
     '#type' => 'markup',
     '#value' => '<select id="datepicker-demo-calendars">
-      <option val// Load library base.ue="gregorian">' . t('Gregorian') . '</option>
+      <option value="gregorian">' . t('Gregorian') . '</option>
       <option value="persian">' . t('Persian') . '</option>
       <option value="thai">' . t('Thai') . '</option>
       <option value="mayan">' . t('Mayan') . '</option>
