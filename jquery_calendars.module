@@ -81,7 +81,6 @@ function jquery_calendars_admin_settings() {
     '#options' => _jquery_calendars_datepicker_themes(),
   );
 
-  // Datepicker demonstration.
   global $base_path;
   // Demo wrapper fieldset.
   $form['datepicker_demo_wrapper'] = array(
@@ -431,7 +430,6 @@ function _jquery_calendars_component_path($component, $compression, $extension =
  *   Library name to return its path.
  *   In this case it implies whether to return the library path or
  *   jQuery upgrade path. It also can be used for other libraries.
- *
  * @param $filename
  *   A library filename to check its
  *   existence as an additional condition.
@@ -443,8 +441,11 @@ function _jquery_calendars_component_path($component, $compression, $extension =
  * @see http://drupal.org/project/libraries
  */
 function _jquery_calendars_path($library = 'jquery.calendars', $filename = '') {
+  // Get library path via Libraries API.
   $path = libraries_get_path($library);
+  // Scan the given path to see if it's that proper one.
   $directory = file_scan_directory($path, '.*', array('.', '..'));
+  // Check that the specified file exists in that given directory.
   $exists = (!empty($filename)) ? file_exists($path . '/' . $filename) : TRUE;
   // If all is set, return the path.
   if (is_dir($path) && $exists && !empty($directory)) {
@@ -488,7 +489,7 @@ function _jquery_calendars_requirements_check() {
       )
     );
   }
-  // Requirements are satisfied.
+  // All set.
   else {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_OK;
     $requirements['jquery_calendars']['value'] = $t('Installed correctly.');
@@ -528,7 +529,7 @@ function _jquery_calendars_datepicker_themes() {
  * Internal helper to convert a mixed-formatted input to an array.
  *
  * @param
- *   Unlimited inputs.
+ *   Unlimited input parameters.
  *
  * @return
  *   An array of input arrays.

@@ -1,6 +1,6 @@
 /**
  * @file
- * Contains a jQuery Calendars Datepicker demonstration JS behaviors.
+ * Contains a jQuery World Calendars Datepicker demo javascript code.
  */
 
 /**
