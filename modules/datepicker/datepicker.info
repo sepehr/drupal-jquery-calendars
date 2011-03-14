@@ -1,7 +1,0 @@
-; $Id$
-name = "Datepicker Form Element"
-description = "Extends Form API to be able to use jQuery World Calendars Datepicker as a form field type."
-package = "Calendar Framework"
-core = 6.x
-dependencies[] = jquery_calendars
-
