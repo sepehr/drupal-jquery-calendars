@@ -62,7 +62,7 @@ function jquery_calendars_form_demo() {
   // Calendar select widget:
   $form['datepicker_demo_wrapper']['demo'] = array(
     '#type' => 'select',
-    '#title' => t('Choose'),
+    '#title' => t('Calendar'),
     '#description' => t('Choose the demonstration calendar system.'),
     '#default_value' => 'gregorian',
     '#attributes' => array('id' => 'datepicker-demo-calendars'),
