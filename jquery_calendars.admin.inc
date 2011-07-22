@@ -20,7 +20,7 @@ function jquery_calendars_admin_settings() {
     // Inject the requirements description to a form field.
     $form['jquery_calendars_error'] = array(
       '#type' => 'item',
-      '#value' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
+      '#markup' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
         '!link' => url('admin/reports/status')
       )),
     );
@@ -68,7 +68,7 @@ function jquery_calendars_form_demo() {
     // Inject the requirements description to a form field.
     $form['jquery_calendars_error'] = array(
       '#type' => 'item',
-      '#value' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
+      '#markup' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
         '!link' => url('admin/reports/status')
       )),
     );
