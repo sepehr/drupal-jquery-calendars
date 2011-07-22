@@ -15,16 +15,7 @@ function jquery_calendars_admin_settings() {
   $form = array();
 
   // If the module is not correctly installed, do not show configs.
-  $requirements = array_pop(_jquery_calendars_requirements_check());
-  if ($requirements['severity'] == REQUIREMENT_ERROR) {
-    // Inject the requirements description to a form field.
-    $form['jquery_calendars_error'] = array(
-      '#type' => 'item',
-      '#markup' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
-        '!link' => url('admin/reports/status')
-      )),
-    );
-    // And let the form be rendered.
+  if (!_jquery_calendars_form_requirements($form)) {
     return $form;
   }
 
@@ -63,16 +54,7 @@ function jquery_calendars_form_demo() {
   $form = array();
 
   // If the module is not correctly installed, do not show configs.
-  $requirements = array_pop(_jquery_calendars_requirements_check());
-  if ($requirements['severity'] == REQUIREMENT_ERROR) {
-    // Inject the requirements description to a form field.
-    $form['jquery_calendars_error'] = array(
-      '#type' => 'item',
-      '#markup' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
-        '!link' => url('admin/reports/status')
-      )),
-    );
-    // And let the form be rendered.
+  if (!_jquery_calendars_form_requirements($form)) {
     return $form;
   }
 
