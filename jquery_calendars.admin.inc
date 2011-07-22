@@ -61,6 +61,43 @@ function jquery_calendars_admin_settings() {
  */
 function jquery_calendars_form_demo() {
   $form = array();
+  global $base_path;
+
+  // Calendar select widget:
+  $form['datepicker_demo_wrapper']['demo'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose'),
+    '#description' => t('Choose the demonstration calendar system.'),
+    '#default_value' => 'gregorian',
+    '#attributes' => array('id' => 'datepicker-demo-calendars'),
+    '#options' => array(
+      'gregorian' => t('Gregorian'),
+      'persian' => t('Persian'),
+      'thai' => t('Thai'),
+      'mayan' => t('Mayan'),
+      'hebrew' => t('Hebrew'),
+      'coptic' => t('Coptic'),
+      'taiwan' => t('Taiwan'),
+      'islamic' => t('Islamic'),
+      'ethiopian' => t('Ethiopian'),
+    ),
+    '#suffix' => '<div id="datepicker-demo"></div>',
+  );
+
+  // API usage example:
+  jquery_calendars_add(
+    // Load this list of library components.
+    'picker, picker.ext, hebrew, persian, taiwan, thai, islamic, ethiopian, coptic, mayan',
+    // Load no locales.
+    array(),
+    // Load the user theme, or use smoothness theme as default.
+    variable_get('jquery_calendars_datepicker_theme', 'smoothness')
+  );
+
+  // Add demonstration specific JS and CSS files:
+  $path = drupal_get_path('module', 'jquery_calendars');
+  drupal_add_js($path . '/jquery_calendars.js');
+  drupal_add_css($path . '/jquery_calendars.css');
 
   return $form;
 }
