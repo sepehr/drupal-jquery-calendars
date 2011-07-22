@@ -1,5 +1,5 @@
-name = "jQuery World Calendars"
-description = "Provides jQuery World Calendars library API for other modules."
+name = "jQuery Calendars API"
+description = "Provides the jQuery World Calendars library API."
 package = "Calendar Systems"
 core = 7.x
 dependencies[] = libraries
