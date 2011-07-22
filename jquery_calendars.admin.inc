@@ -53,7 +53,7 @@ function jquery_calendars_admin_settings() {
 function jquery_calendars_form_demo() {
   $form = array();
 
-  // If the module is not correctly installed, do not show configs.
+  // If the module is not correctly installed, do not show the demo.
   if (!_jquery_calendars_form_requirements($form)) {
     return $form;
   }
