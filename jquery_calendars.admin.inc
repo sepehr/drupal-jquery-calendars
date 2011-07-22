@@ -115,3 +115,28 @@ function jquery_calendars_form_demo() {
 
   return $form;
 }
+
+/**
+ * Internal helper: Adds an warning form element of requirements check fails.
+ *
+ * @param $form
+ *   Form array to inject the element into.
+ *
+ * @return
+ *   Boolean value.
+ */
+function _jquery_calendars_form_requirements(&$form) {
+  $requirements = array_pop(_jquery_calendars_requirements_check());
+  if ($requirements['severity'] == REQUIREMENT_ERROR) {
+    // Inject the requirements description to a form field.
+    $form['jquery_calendars_error'] = array(
+      '#type' => 'item',
+      '#markup' => $requirements['description'] . ' ' . t('Checkout the <a href="!link">status reports</a>.', array(
+        '!link' => url('admin/reports/status')
+      )),
+    );
+    // Indicate the failure.
+    return FALSE;
+  }
+  return TRUE;
+}
