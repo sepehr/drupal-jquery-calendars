@@ -463,14 +463,13 @@ function _jquery_calendars_path($library = 'jquery.calendars', $filename = '') {
  */
 function _jquery_calendars_requirements_check() {
   $t = get_t();
-  $dependencies = array(_jquery_calendars_path('jquery.calendars'), _jquery_calendars_path('jquery'));
   $requirements = array('jquery_calendars' => array(
     'title' => $t('jQuery Calendars API'),
     'value' => $t('Not installed correctly.'),
   ));
 
   // Check jQuery Calendars.
-  if (!$dependencies[0]) {
+  if (!_jquery_calendars_path('jquery.calendars')) {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_ERROR;
     $requirements['jquery_calendars']['description'] = $t('The <a href="!library">jQuery World Calendars</a> plugin is missing. <a href="!download">Download</a> the library and extract it to <code>sites/all/libraries/</code> directory. Also you need to rename the extracted directory to <strong>jquery.calendars</strong>.',
       array(
@@ -479,17 +478,6 @@ function _jquery_calendars_requirements_check() {
       )
     );
   }
-  // Check jQuery 1.4.x.
-  elseif (!$dependencies[1]) {
-    $requirements['jquery_calendars']['severity'] = REQUIREMENT_ERROR;
-    $requirements['jquery_calendars']['description'] = $t('The <em>jQuery World Calendars</em> plugin requires <a href="!library">jQuery 1.4.2+</a> library which is missing. <a href="!download">Download</a> the library and place it to <code>sites/all/libraries/jquery</code> directory. So it will be accessible at <code><strong>sites/all/libraries/jquery/jquery-1.4.2.min.js</strong></code> path.',
-      array(
-        '!library' => 'http://jquery.com/',
-        '!download' => 'http://code.jquery.com/jquery-1.4.2.min.js',
-      )
-    );
-  }
-  // All set.
   else {
     $requirements['jquery_calendars']['severity'] = REQUIREMENT_OK;
     $requirements['jquery_calendars']['value'] = $t('Installed correctly.');
@@ -551,4 +539,3 @@ function _jquery_calendars_input_to_array() {
 
   return $arrays;
 }
-
