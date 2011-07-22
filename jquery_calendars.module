@@ -452,11 +452,10 @@ function _jquery_calendars_requirements_check() {
  */
 function _jquery_calendars_datepicker_themes() {
   $themes = array();
-  $files = file_scan_directory(_jquery_calendars_path(), '.css', array(
-    '.',
-    '..',
-    'CVS',
-  ), FALSE, FALSE, 'name');
+  $files = file_scan_directory(_jquery_calendars_path(), '/.css/', array(
+    'key' => 'name',
+    'recurse' => FALSE,
+  ));
 
   foreach ($files as $key => $file) {
     // Exluclude jQuery UI themes, for now.
@@ -465,7 +464,7 @@ function _jquery_calendars_datepicker_themes() {
     }
     // Loadup the array.
     $name = str_replace('.calendars.picker', '', $key);
-    $themes[$name] = ucwords($name) . ' - ' . $file->basename;
+    $themes[$name] = ucwords($name) . ' - ' . $file->name;
   }
 
   return $themes;
