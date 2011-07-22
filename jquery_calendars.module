@@ -34,14 +34,22 @@ function jquery_calendars_menu() {
     'access arguments' => array('administer jquery calendars'),
     'file' => 'jquery_calendars.admin.inc',
   );
-  // Demonstration page:
+  // Settings default tab:
+  $items['admin/config/user-interface/jquery-calendars/settings'] = array(
+    'title' => 'Settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+  // Demonstration tab:
   $items['admin/config/user-interface/jquery-calendars/demo'] = array(
-    'title' => 'jQuery Calendars Demo',
+    'title' => 'Demonstration',
     'description' => 'jQuery World Calendars demonstration.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('jquery_calendars_form_demo'),
     'access arguments' => array('administer jquery calendars'),
     'file' => 'jquery_calendars.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
   );
 
   return $items;
