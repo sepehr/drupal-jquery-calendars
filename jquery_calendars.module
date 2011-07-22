@@ -6,11 +6,6 @@
  */
 
 /**
- * Defines jQuery 1.4.x filename part for lazies to cheer!
- */
-define(JQUERY_CALENDARS_JQUERY, '/jquery-1.4.2.min.js');
-
-/**
  * Implements hook_perm().
  */
 function jquery_calendars_perm() {
