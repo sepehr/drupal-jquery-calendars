@@ -119,29 +119,6 @@ function jquery_calendars_admin_settings() {
 }
 
 /**
- * Implements jquery_calendars_hook_preprocess_hook().
- *
- * Strips out the core jQuery v1.2 and adds a 1.4.x one,
- * In fact it's a tiny jQuery Update module at its heart.
- */
-function jquery_calendars_preprocess_page(&$vars) {
-  global $_jquery_calendars;
-  // Check if we need to replace the jQuery file.
-  if ($_jquery_calendars == TRUE && !empty($vars['scripts'])) {
-    $scripts = drupal_add_js();
-    // Add the 1.4.x one.
-    $scripts['core'] = array_merge(
-      array(_jquery_calendars_path('jquery') . JQUERY_CALENDARS_JQUERY => $scripts['core']['misc/jquery.js']),
-      $scripts['core']
-    );
-    // Remove core's jQuery.
-    unset($scripts['core']['misc/jquery.js']);
-    // Let 'em go!
-    $vars['scripts'] = drupal_get_js('header', $scripts);
-  }
-}
-
-/**
  * API function to include specified jQuery Calendars
  * library components while trying to take care of dups n' deps.
  *
