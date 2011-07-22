@@ -351,9 +351,6 @@ function jquery_calendars_add($components = array(), $locales = array(), $theme 
     $path = _jquery_calendars_component_path('picker', '', 'css', "$theme.calendars");
     drupal_add_css($path);
   }
-
-  // We're done.
-  $GLOBALS['_jquery_calendars'] = TRUE;
 }
 
 /**
