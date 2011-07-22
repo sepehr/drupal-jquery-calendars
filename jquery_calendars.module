@@ -6,10 +6,15 @@
  */
 
 /**
- * Implements hook_perm().
+ * Implements hook_permission().
  */
-function jquery_calendars_perm() {
-  return array('administer jquery calendars');
+function jquery_calendars_permission() {
+  return array(
+    'administer jquery calendars' => array(
+      'title' => 'Administer jQuery Calendars API',
+      'description' => 'Administer jQuery Calendars API configuration options.',
+    ),
+  );
 }
 
 /**
