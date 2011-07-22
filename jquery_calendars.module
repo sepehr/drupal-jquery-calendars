@@ -3,6 +3,9 @@
 /**
  * @file
  * Implements necessary hooks, API and helpers for jQuery World Calendars.
+ *
+ * @todo
+ *   - Implement hook_library().
  */
 
 /**
