@@ -119,22 +119,6 @@ function jquery_calendars_admin_settings() {
 }
 
 /**
- * Implements hook_theme_registry_alter().
- *
- * Make the page preprocess function runs last.
- */
-function jquery_calendars_theme_registry_alter(&$theme_registry) {
-  if (isset($theme_registry['page'])) {
-    // Remove if it's already existing.
-    if ($key = array_search('jquery_calendars_preprocess_page', $theme_registry['page']['preprocess functions'])) {
-      unset($theme_registry['page']['preprocess functions'][$key]);
-    }
-    // And append.
-    $theme_registry['page']['preprocess functions'][] = 'jquery_calendars_preprocess_page';
-  }
-}
-
-/**
  * Implements jquery_calendars_hook_preprocess_hook().
  *
  * Strips out the core jQuery v1.2 and adds a 1.4.x one,
