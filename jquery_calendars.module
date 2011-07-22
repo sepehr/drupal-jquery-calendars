@@ -389,11 +389,8 @@ function _jquery_calendars_component_path($component, $compression, $extension =
  *
  * @param $library
  *   Library name to return its path.
- *   In this case it implies whether to return the library path or
- *   jQuery upgrade path. It also can be used for other libraries.
  * @param $filename
- *   A library filename to check its
- *   existence as an additional condition.
+ *   A library filename to check its existence as an additional condition.
  *
  * @return
  *   Either the library path or FALSE on fail.
@@ -405,7 +402,7 @@ function _jquery_calendars_path($library = 'jquery.calendars', $filename = '') {
   // Get library path via Libraries API.
   $path = libraries_get_path($library);
   // Scan the given path to see if it's that proper one.
-  $directory = file_scan_directory($path, '.*');
+  $directory = file_scan_directory($path, '/.*/', array('recurse' => FALSE));
   // Check that the specified file exists in the given directory.
   $exists = (!empty($filename)) ? file_exists($path . '/' . $filename) : TRUE;
   // If all is set, return the path.
