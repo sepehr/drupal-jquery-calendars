@@ -11,7 +11,7 @@
  * @ingroup forms
  * @see system_settings_form()
  */
-function jquery_calendars_admin_settings() {
+function jquery_calendars_form_settings() {
   $form = array();
 
   // If the module is not correctly installed, do not show configs.
