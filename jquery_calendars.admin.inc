@@ -87,7 +87,9 @@ function jquery_calendars_form_demo() {
     // Load no locales.
     array(),
     // Load the user theme, or use smoothness theme as default.
-    variable_get('jquery_calendars_datepicker_theme', 'smoothness')
+    variable_get('jquery_calendars_datepicker_theme', 'smoothness'),
+    // Set user's compression level, or pack as default.
+    variable_get('jquery_calendars_compression_level', 'pack')
   );
 
   // Add demonstration specific JS and CSS files:
