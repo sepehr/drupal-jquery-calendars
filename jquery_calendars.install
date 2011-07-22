@@ -16,9 +16,9 @@ function jquery_calendars_requirements($phase) {
 }
 
 /**
- * Implements hook_install().
+ * Implements hook_enable().
  */
-function jquery_calendars_install() {
+function jquery_calendars_enable() {
   // Notify user.
   drupal_set_message(st('jQuery World Calendars has been installed. Please set your settings in <a href="!link">configuration page</a>.',
     array('!link' => url('admin/settings/jquery-calendars'))
