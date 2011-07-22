@@ -12,16 +12,12 @@ Dependencies
 
 Requirements
 ============
- - jQuery 1.4.2 (http://code.jquery.com/jquery-1.4.2.min.js)
-  Accessible via sites/all/libraries/jquery/jquery-1.4.2.min.js
-
  - jQuery Calendars library (http://keith-wood.name/calendars.html)
-  Accessible via sites/all/libraries/jquery.calendars
+   Accessible via sites/all/libraries/jquery.calendars
 
 Installation
 ============
  - Download and install Libraries API module as usual.
- - Download jQuery 1.4.2 and put it in sites/all/libraries/jquery/jquery-1.4.2.min.js
  - Download jQuery Calendars library and put it in sites/all/libraries/jquery.calendars
  - Goto sites/all/settings/jquery-calendars
 
@@ -74,4 +70,3 @@ Available Components
 Author and Maintainer
 =====================
 Sepehr Lajevardi (http://drupal.org/user/668010)
-
