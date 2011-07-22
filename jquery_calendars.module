@@ -25,12 +25,21 @@ function jquery_calendars_permission() {
  */
 function jquery_calendars_menu() {
   $items = array();
-
+  // Administration form:
   $items['admin/config/user-interface/jquery-calendars'] = array(
     'title' => 'jQuery Calendars API',
     'description' => 'Configuration options for jQuery World Calendars.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('jquery_calendars_admin_settings'),
+    'access arguments' => array('administer jquery calendars'),
+    'file' => 'jquery_calendars.admin.inc',
+  );
+  // Demonstration page:
+  $items['admin/config/user-interface/jquery-calendars/demo'] = array(
+    'title' => 'jQuery Calendars Demo',
+    'description' => 'jQuery World Calendars demonstration.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('jquery_calendars_form_demo'),
     'access arguments' => array('administer jquery calendars'),
     'file' => 'jquery_calendars.admin.inc',
   );
