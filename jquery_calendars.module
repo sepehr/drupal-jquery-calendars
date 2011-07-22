@@ -30,7 +30,7 @@ function jquery_calendars_menu() {
     'title' => 'jQuery Calendars API',
     'description' => 'Configuration options for jQuery World Calendars.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('jquery_calendars_admin_settings'),
+    'page arguments' => array('jquery_calendars_form_settings'),
     'access arguments' => array('administer jquery calendars'),
     'file' => 'jquery_calendars.admin.inc',
   );
