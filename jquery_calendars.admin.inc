@@ -88,3 +88,14 @@ function jquery_calendars_admin_settings() {
 
   return system_settings_form($form);
 }
+
+/**
+ * Form callback for jQuery World Calendars demonstration.
+ *
+ * @ingroup forms
+ */
+function jquery_calendars_form_demo() {
+  $form = array();
+
+  return $form;
+}
