@@ -98,8 +98,8 @@ function jquery_calendars_admin_settings() {
   );
   // Demo itself.
   $form['datepicker_demo_wrapper']['demo'] = array(
-    '#type' => 'markup',
-    '#value' => '<select id="datepicker-demo-calendars">
+    '#type' => 'item',
+    '#markup' => '<select id="datepicker-demo-calendars">
       <option value="gregorian">' . t('Gregorian') . '</option>
       <option value="persian">' . t('Persian') . '</option>
       <option value="thai">' . t('Thai') . '</option>
