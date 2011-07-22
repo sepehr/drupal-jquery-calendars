@@ -1,6 +1,5 @@
 name = "jQuery World Calendars"
 description = "Provides jQuery World Calendars library API for other modules."
 package = "Calendar Systems"
-core = 6.x
+core = 7.x
 dependencies[] = libraries
-
